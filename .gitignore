@@ -1,0 +1,739 @@
+import java.sql.*;
+import org.apache.derby.jdbc.ClientDriver;
+import java.util.Scanner;
+import java.io.Console;
+
+public class transit
+{
+   public static void main(String[] args)
+   {
+      char esc = 27;
+      String clear = esc + "[2J";
+      Connection conn = null;
+      try
+      {
+
+        Driver d = new ClientDriver();
+        String url = "jdbc:derby://localhost:5555/bustransitdb"
+                       + ";create=true";
+        conn = d.connect(url, null);
+
+        Console console = System.console();
+        Scanner type= new Scanner(System.in);
+        int response1, response2;
+        int i=0,k=0;
+
+        while(k==0)
+        {
+	  System.out.print(clear);
+	  String str = "\t\t\t\tWELCOME TO WICHITA BUS TRANSIT SYSTEM ! ..."; 
+	  System.out.printf("%" + (80 + str.length())/2 + "s\n", str); 
+
+	  System.out.println("\t\t\t\t1:Admin\n");
+	  System.out.println("\t\t\t\t2:User\n");
+	  System.out.println("\t\t\t\t3:Exit\n");
+	  System.out.print("\t\t\t\tEnter Your Choice: ");
+	  response1=type.nextInt();
+	  if(response1==1)
+	  {
+	    k=1;
+	    while(i<3)
+	    {
+		char[] pass = console.readPassword("\t\t\t\t\nEnter your secret password: ");
+		String s=new String("asdf");
+		String p=new String(pass);
+		if (!p.equals(s))
+		{
+		  if(i<2)
+		    System.out.println("\t\t\t\tWrong Password Entered, Try again!!");
+		  else
+		    System.out.println("\t\t\t\tWrong Password Entered, Exiting");
+		  i++;
+		}
+		else
+		{
+		  int j=0;
+                  while(j==0)
+	          {
+		    System.out.print(clear);
+		    System.out.println();
+		    System.out.println("\t\t\t\tChoose from one of the following options:");
+		    System.out.println();
+		    System.out.println("\t\t\t\t1:  Display all the buses driven by a driver\n");
+		    System.out.println("\t\t\t\t2:  Display Incident Details\n");
+		    System.out.println("\t\t\t\t3:  Display all the drivers who has driven a bus\n");
+		    System.out.println("\t\t\t\t4:  Display all the buses which travels along a route\n");
+		    System.out.println("\t\t\t\t5:  Display all the buses which starts at a particular time\n");
+		    System.out.println("\t\t\t\t6:  Display all the routes\n");
+		    System.out.println("\t\t\t\t7:  Display location, arrival and departure time for a given route\n");
+		    System.out.println("\t\t\t\t8:  Display all kinds of tickets available\n");
+		    System.out.println("\t\t\t\t9:  Display route, arrival and departure time for a given location\n");
+		    System.out.println("\t\t\t\t10: Display bus route from one location to another\n");
+
+		    System.out.print("\t\t\t\tEnter your choice:");
+		    response2=type.nextInt();
+		    switch (response2)
+        	    {
+	              case 1: 
+			      Query1(conn);	
+	        	      break;
+            	      case 2: Query2(conn);
+                    	      break;
+            	      case 3: Query3(conn);
+                    	      break;
+            	      case 4: Query4(conn);
+                    	      break;
+           	      case 5: Query5(conn);
+                    	      break;
+	    	      case 6: Query6(conn);
+                   	       break;
+            	      case 7: Query7(conn);
+                   	       break;
+            	      case 8: Query8(conn);
+                    	      break;
+           	      case 9: Query9(conn);
+                    	      break;
+            	      case 10: Query10(conn);
+                    	      break;
+
+           	      default: System.out.println("Invalid Response");
+                              break;
+
+  		    }
+
+		    Scanner keyboard=new Scanner(System.in);
+		    int l=0;
+		    System.out.print("Do you want to continue(yes/no)?:");
+		    while(l==0)
+		    {
+		        String cont = keyboard.nextLine();
+			if(cont.equals("yes") || cont.equals("y"))
+			{
+			  j=0;
+			  l=1;
+			}
+
+			else if(cont.equals("no") || cont.equals("n"))
+			{
+			  j=1;
+			  l=1;
+			}
+
+			else
+			{
+			  System.out.print("Invalid Entry. Enter(yes/no):");
+			}
+		    }
+		    i=3;
+		  }
+		}
+	    }
+	}
+ 
+	else if(response1==2)
+	{
+	  k=1;
+	  int j=0;
+	  while(j==0)
+	  {
+		System.out.println();
+		System.out.println("Choose from one of the following options:");
+		System.out.println();
+		System.out.println("1: Display all the routes");
+		System.out.println("2: Display location, arrival and departure time for a given route");
+		System.out.println("3: Display all kinds of tickets available");
+		System.out.println("4: Display route, arrival and departure time for a given location");
+		System.out.println("5: Display bus route from one location to another");
+
+		System.out.print("Enter your choice:");
+		response2=type.nextInt();
+
+		 switch (response2)
+         	{
+            		case 1: Query6(conn);
+                  	        break;
+           		case 2: Query7(conn);
+                 	        break;
+            		case 3: Query8(conn);
+                    	        break;
+         	  	case 4: Query9(conn);
+                           	break;
+            		case 5: Query10(conn);
+                         	break;
+
+                       default: System.out.println("Invalid Response");
+                                break;
+        	 }
+
+		Scanner keyboard=new Scanner(System.in);
+		int l=0;
+		System.out.print("Do you want to continue(yes/no)?:");
+		while(l==0)
+		{
+			String cont = keyboard.nextLine();
+			if(cont.equals("yes") || cont.equals("y"))
+			{
+				j=0;
+				l=1;
+			}
+			
+			else if(cont.equals("no") || cont.equals("n"))
+			{
+				j=1;
+				l=1;
+			}
+
+			else
+			{
+				System.out.print("Invalid Entry. Enter(yes/no):");
+			}
+		}		
+           }
+	}
+
+	else if(response1==3)
+	{
+		System.exit(0);
+	}
+
+	else
+	{
+		System.out.println("Invalid response,Enter (1/2)");
+	}
+    }
+
+  }
+
+  catch(SQLException e)
+  {
+         e.printStackTrace();
+  }
+
+  finally
+  {
+     try
+     {
+        if(conn != null)
+        conn.close();
+     }
+    
+     catch(SQLException e)
+     {
+        e.printStackTrace();
+     }
+  }
+}
+
+
+public static void Query1(Connection conn) throws SQLException
+{
+char esc = 27;
+      String clear = esc + "[2J";
+System.out.print(clear);
+
+Statement stat1 = conn.createStatement();
+
+String query1 = "select firstname, lastname"
+                + " from drivers";
+
+
+ResultSet rs1 = stat1.executeQuery(query1);
+
+System.out.println();
+System.out.format("%-12s %-12s%n","First Name","Last Name");
+
+ while (rs1.next())
+      {
+         String fname = rs1.getString("firstname");
+         String lname = rs1.getString("lastname");
+
+System.out.format("%-10s %-10s",fname,lname);
+}
+
+Scanner keyboard=new Scanner(System.in);
+
+System.out.println();
+System.out.print("Enter the First Name of the driver:");
+String first = keyboard.nextLine();
+first="'" + first + "'";
+
+System.out.print("Enter the Last Name of the driver:");
+String last = keyboard.nextLine();
+last = "'" +last + "'";
+
+Statement stat = conn.createStatement();
+
+String query = "select bus.busnumber, bus.routenumber, bus.model, bus.make, bus.enginenumber, bus.vin, bus.seatcapacity"
+		+ " from bus, drivers, bus_driver"
+		+ " where bus.busnumber =bus_driver.BusNumber"
+		+ " and drivers.LicenseNumber=bus_driver.LicenseNumber"
+		+ " and drivers.FirstName=" +first
+		+ " and drivers.LastName=" +last;
+
+
+ResultSet rs = stat.executeQuery(query);
+
+System.out.println();
+System.out.format("%-10s %-12s %-12s %-12s %-20s %-17s %-10s","BusNumber","RouteNumber","Model","Make","EngineNumber","VIN","SeatCapacity");
+
+ while (rs.next())
+      {
+         String busno = rs.getString("BusNumber");
+	 String route = rs.getString("RouteNumber");
+	 String model = rs.getString("Model");
+String make = rs.getString("Make");
+String engine = rs.getString("EngineNumber");
+String vin = rs.getString("VIN");
+String capacity = rs.getString("SeatCapacity");
+System.out.format("%-10s %-12s %-12s %-12s %-20s %-17s %-10s",BusNumber,RouteNumber,Model,Make,EngineNumber,VIN,SeatCapacity);
+
+//System.out.println(busno + "\t\t" + route +"\t\t" + model + "\t\t\t" + make +"\t" +engine +"\t" + vin +"\t" + capacity);
+}
+
+System.out.println();
+rs.close();
+
+} 
+
+
+
+public static void Query2(Connection conn) throws SQLException
+{
+Scanner keyboard=new Scanner(System.in);
+
+Statement stat = conn.createStatement();
+
+String query = "select b.busnumber, b.routenumber, b.model, b.make, b.enginenumber, b.vin, b.seatcapacity, d.licensenumber, d.firstname, d.lastname, d.address, d.telephonenumber, i.incidentnumber, i.locationrouteid, i.Date, i.time"
+                + " from bus b, drivers d, bus_driver bd, incident i, location l, route r, location_route lr"
+                + " where b.busnumber =bd.BusNumber"
+                + " and d.LicenseNumber=bd.LicenseNumber"
+                + " and I.BusDriverId=BD.BusDriverId"
+                + " and L.LocationId=LR.LocationId"
+		+ " and R.RouteNumber=LR.RouteNumber"
+		+ " and I.LocationRouteId=LR.LocationRouteId";
+
+
+ResultSet rs = stat.executeQuery(query);
+
+System.out.println();
+System.out.println("Bus#\tRoute#\tModel\t\tMake\tEngine#\tVIN\t\tSeatCap\tlicense\tname\taddress\ttelephone#\tincident#\tlrid\tdate\ttime");
+
+ while (rs.next())
+      {
+         String busno = rs.getString("BusNumber");
+         String route = rs.getString("RouteNumber");
+         String model = rs.getString("Model");
+String make = rs.getString("Make");
+String engine = rs.getString("EngineNumber");
+String vin = rs.getString("VIN");
+String capacity = rs.getString("SeatCapacity");
+String license= rs.getString("licensenumber");
+String first= rs.getString("firstname");
+String last= rs.getString("lastname");
+String add=rs.getString("address");
+String tel=rs.getString("telephonenumber");
+String inc=rs.getString("incidentnumber");
+String loc=rs.getString("locationrouteid");
+String date=rs.getString("date");
+String time=rs.getString("time");
+
+System.out.println(busno + "\t" + route +"\t" + model + "\t" + make +"\t" +engine +"\t" + vin +"\t" + capacity + "\t" +license +"\t"+ first +" " +last +"\t" +add +"\t"+ tel +"\t"+inc +"\t"+ loc +"\t"+ date +"\t"+ time);
+}
+
+System.out.println();
+rs.close();
+
+
+}
+
+public static void Query3(Connection conn) throws SQLException
+{
+char esc = 27;
+      String clear = esc + "[2J";
+System.out.print(clear);
+
+Statement stat3 = conn.createStatement();
+
+String query3 = "select busnumber"
+                + " from bus";
+
+
+ResultSet rs3 = stat3.executeQuery(query3);
+
+System.out.println();
+
+System.out.println("Bus Number");
+
+ while (rs3.next())
+      {
+         String license3 = rs3.getString("BusNumber");
+
+System.out.println(license3 + "\n");
+}
+
+
+
+Scanner keyboard=new Scanner(System.in);
+
+System.out.print("Enter Bus Number:");
+String bus = keyboard.nextLine();
+bus="'" + bus + "'";
+
+Statement stat = conn.createStatement();
+
+String query = "select d.*"
+                + " from bus b, drivers d, bus_driver bd"
+                + " where b.busnumber =bd.BusNumber"
+                + " and d.LicenseNumber=bd.LicenseNumber"
+                + " and b.busnumber=" +bus;
+
+
+ResultSet rs = stat.executeQuery(query);
+
+System.out.println();
+
+System.out.println("License\tName\t\tAddress\t\t\t\tTel#");
+
+ while (rs.next())
+      {
+         String license = rs.getString("LicenseNumber");
+         String first = rs.getString("FirstName");
+         String last = rs.getString("LastName");
+	 String add = rs.getString("Address");
+	 String tel = rs.getString("TelephoneNumber");
+
+System.out.println(license + "\t" + first +" " + last + "\t" + add +"\t" +tel);
+}
+
+System.out.println();
+rs.close();
+
+
+}
+
+public static void Query4(Connection conn) throws SQLException
+{
+char esc = 27;
+      String clear = esc + "[2J";
+System.out.print(clear);
+
+Statement stat4 = conn.createStatement();
+
+String query4= "select *"
+                + " from route";
+
+ResultSet rs4 = stat4.executeQuery(query4);
+
+System.out.println();
+System.out.println("RouteNumber\tRouteName");
+
+while(rs4.next())
+{
+String routeno=rs4.getString("RouteNumber");
+String routename=rs4.getString("RouteName");
+
+System.out.println(routeno+"\t\t"+routename);
+}
+
+
+Scanner keyboard=new Scanner(System.in);
+System.out.print("Enter the RouteNumber:");
+String routeno = keyboard.next();
+
+Statement stat = conn.createStatement();
+
+String query = "select b.busnumber, b.routenumber, b.model, b.make, b.enginenumber, b.vin, b.seatcapacity"
+                + " from bus b, route r"
+                + " where b.routenumber =r.routeNumber"
+                + " and r.routenumber="+routeno;
+
+
+ResultSet rs = stat.executeQuery(query);
+
+System.out.println();
+System.out.println("BusNumber\tRouteNumber\tModel\t\tMake\tEngineNumber\tVIN\t\t\tSeatCapacity");
+
+ while (rs.next())
+      {
+         String busno = rs.getString("BusNumber");
+         String route = rs.getString("RouteNumber");
+         String model = rs.getString("Model");
+String make = rs.getString("Make");
+String engine = rs.getString("EngineNumber");
+String vin = rs.getString("VIN");
+String capacity = rs.getString("SeatCapacity");
+System.out.println(busno + "\t\t" + route +"\t\t" + model + "\t" + make +"\t" +engine +"\t" + vin +"\t" + capacity);
+}
+
+System.out.println();
+rs.close();
+
+}
+
+public static void Query5(Connection conn) throws SQLException
+{
+Scanner keyboard=new Scanner(System.in);
+
+System.out.print("Enter time in the format(hh:mm:ss):");
+String time = keyboard.nextLine();
+time="'" + time + "'";
+
+Statement stat = conn.createStatement();
+
+String query = "select b.busnumber, b.routenumber, b.model, b.make, b.enginenumber, b.vin, b.seatcapacity"
+                + " from bus b, route r, bus_schedule bs"
+                + " where b.routenumber =r.RouteNumber"
+                + " and r.routenumber=bs.routenumber"
+                + " and bs.starttime=" +time;
+
+
+ResultSet rs = stat.executeQuery(query);
+
+System.out.println();
+System.out.println("BusNumber\tRouteNumber\tModel\t\tMake\tEngineNumber\tVIN\t\t\tSeatCapacity");
+
+ while (rs.next())
+      {
+         String busno = rs.getString("BusNumber");
+         String route = rs.getString("RouteNumber");
+         String model = rs.getString("Model");
+String make = rs.getString("Make");
+String engine = rs.getString("EngineNumber");
+String vin = rs.getString("VIN");
+String capacity = rs.getString("SeatCapacity");
+System.out.println(busno + "\t\t" + route +"\t\t" + model + "\t" + make +"\t" +engine +"\t" + vin +"\t" + capacity);
+}
+
+System.out.println();
+rs.close();
+
+}
+
+public static void Query6(Connection conn) throws SQLException
+{
+Scanner keyboard = new Scanner(System.in);
+Statement stat = conn.createStatement();
+
+String query= "select *"
+                + " from route";
+
+ResultSet rs = stat.executeQuery(query);
+
+System.out.println();
+System.out.println("RouteNumber\tRouteName\tRoute Distance");
+
+while(rs.next())
+{
+String routeno=rs.getString("RouteNumber");
+String routename=rs.getString("RouteName");
+String distance=rs.getString("Distance");
+
+System.out.println(routeno+"\t\t"+routename+"\t\t"+distance);
+}
+System.out.println();
+rs.close();
+
+
+
+}
+
+public static void Query7(Connection conn) throws SQLException
+{
+Statement stat7 = conn.createStatement();
+
+String query7= "select *"
+                + " from route";
+
+ResultSet rs7 = stat7.executeQuery(query7);
+
+System.out.println();
+System.out.println("RouteName");
+
+while(rs7.next())
+{
+String routename7 = rs7.getString("RouteName");
+System.out.println(routename7);
+}
+
+
+Scanner keyboard=new Scanner(System.in);
+
+System.out.print("Enter RouteName:");
+String route = keyboard.nextLine();
+route="'" + route + "'";
+
+Statement stat = conn.createStatement();
+
+String query = "select l.locationname,lt.arrivaltime,lt.departuretime"
+                + " from route r, location_route lr,location l, location_time lt"
+                + " where r.routenumber =lr.RouteNumber"
+                + " and lr.locationrouteid=lt.locationrouteid and l.locationid=lr.locationid"
+                + " and r.routename=" +route;
+
+
+ResultSet rs = stat.executeQuery(query);
+
+System.out.println();
+System.out.println("Location\tArrival time\t Departure time");
+
+ while (rs.next())
+      {
+         String loc = rs.getString("locationname");
+         String arrival = rs.getString("arrivaltime");
+         String departure = rs.getString("departuretime");
+
+System.out.println(loc+"\t"+arrival+"\t"+departure);
+}
+
+System.out.println();
+rs.close();
+
+}
+
+
+
+public static void Query8(Connection conn) throws SQLException
+{
+Scanner keyboard = new Scanner(System.in);
+
+Statement stat = conn.createStatement();
+
+String query= "select typename,price"
+		+ " from ticket_type";
+
+ResultSet rs = stat.executeQuery(query);
+
+System.out.println();
+System.out.println("TypeName\tPrice");
+
+while(rs.next())
+{
+String type=rs.getString("TypeName");
+String pric=rs.getString("Price");
+System.out.println(type+"\t\t"+pric);
+}
+System.out.println();
+rs.close();
+}
+
+public static void Query9(Connection conn) throws SQLException
+{
+Statement stat9 = conn.createStatement();
+
+String query9= "select distinct locationname"
+                + " from location";
+
+ResultSet rs9 = stat9.executeQuery(query9);
+
+System.out.println();
+System.out.println("LocationName");
+
+while(rs9.next())
+{
+String type=rs9.getString("LocationName");
+System.out.println(type);
+
+}
+
+
+Scanner keyboard=new Scanner(System.in);
+
+System.out.print("Enter the location name:");
+String loc = keyboard.nextLine();
+loc="'" + loc + "'";
+
+Statement stat = conn.createStatement();
+
+String query = "select r.routename,r.routenumber, lt.arrivaltime, lt.departuretime"
+                + " from route r, location l, location_route lr, location_time lt"
+                + " where r.routenumber =lr.RouteNumber"
+		+ " and l.locationid=lr.locationid"
+                + " and lr.locationrouteid=lt.locationrouteid"
+                + " and l.locationname=" +loc;
+
+
+ResultSet rs = stat.executeQuery(query);
+
+System.out.println();
+System.out.println("RouteName\tRouteNumber\tArrival Time\tDeparture Time");
+
+ while (rs.next())
+      {
+         String routename = rs.getString("RouteName");
+         String routeno = rs.getString("RouteNumber");
+         String arrival = rs.getString("ArrivalTime");
+	 String departure = rs.getString("DepartureTime");
+
+System.out.println(routename+"\t"+routeno+"\t"+arrival+"\t"+departure);
+}
+
+System.out.println();
+rs.close();
+
+}
+
+public static void Query10(Connection conn) throws SQLException
+{
+Statement stat9 = conn.createStatement();
+
+String query9= "select distinct locationname"
+                + " from location";
+
+ResultSet rs9 = stat9.executeQuery(query9);
+
+System.out.println();
+System.out.println("LocationName");
+
+while(rs9.next())
+{
+String type=rs9.getString("LocationName");
+System.out.println(type);
+
+}
+
+
+Scanner keyboard=new Scanner(System.in);
+
+System.out.print("Enter the location name:");
+String loc1 = keyboard.nextLine();
+loc1="'" + loc1 + "'";
+
+System.out.print("Enter another location name:");
+String loc2 = keyboard.nextLine();
+loc2="'" + loc2 + "'";
+
+
+Statement stat = conn.createStatement();
+
+String query = "select distinct r.routename, r.routenumber"
+                + " from route r, location l, location_route lr"
+                + " where r.routenumber =lr.RouteNumber"
+                + " and l.locationid=lr.locationid"
+                + " and (l.locationname=" +loc1
+		+ " or l.locationname=" +loc2 + ")";
+
+
+ResultSet rs = stat.executeQuery(query);
+
+System.out.println();
+System.out.println("RouteName\tRouteNumber");
+
+ while (rs.next())
+      {
+         String routename = rs.getString("RouteName");
+         String routeno = rs.getString("RouteNumber");
+
+System.out.println(routename+"\t"+routeno+"\t");
+}
+
+System.out.println();
+rs.close();
+
+
+
+
+}
+
+
+}
+
